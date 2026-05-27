@@ -1,0 +1,29 @@
+# Go binary
+/forum
+*.exe
+
+# SQLite database files. forum.db is tracked because it ships the demo
+# accounts and posts that reviewers need on clone; WAL and shared-memory
+# sidecars stay untracked.
+*.db
+!forum.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Uploaded files (image attachments) — runtime data, not source
+/uploads/
+/data/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE / editors
+.vscode/
+.idea/
+*.swp
+
+# Env
+.env
+.env.local

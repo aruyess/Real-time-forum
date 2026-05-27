@@ -1,0 +1,26 @@
+# VCS / history
+.git
+.gitignore
+
+# Local data — never bake into an image. forum.db is the exception: it
+# ships demo accounts and posts that the entrypoint seeds into the volume.
+*.db
+!forum.db
+*.db-wal
+*.db-shm
+*.db-journal
+
+# Build artifacts
+/forum
+*.exe
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode
+.idea
+*.swp
+
+# Env
+.env
+.env.local

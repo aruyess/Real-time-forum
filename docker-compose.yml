@@ -1,0 +1,13 @@
+services:
+  forum:
+    build: .
+    image: forum:latest
+    container_name: forum
+    ports:
+      - "8080:8080"
+    volumes:
+      - forum-data:/data
+    restart: unless-stopped
+
+volumes:
+  forum-data:

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Forum</title>
+    <script>
+        // Apply theme before stylesheet/render to avoid flash of unstyled content.
+        (function () {
+            var t = localStorage.getItem("theme") || "dark";
+            document.documentElement.setAttribute("data-theme", t);
+        })();
+    </script>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Сменить тему">☀</button>
+    <div id="app"></div>
+    <script type="module" src="/js/app.js"></script>
+</body>
+</html>

@@ -14,47 +14,12 @@ package main
 
 import (
 	"log"
-	"net/http"
-	"os"
-	"path/filepath"
 
-	"forum/internal/db"
-	"forum/internal/routes"
-	"forum/internal/ws"
+	"forum/internal/server"
 )
 
 func main() {
-	dbPath := os.Getenv("FORUM_DB")
-	if dbPath == "" {
-		dbPath = "forum.db"
-	}
-	addr := os.Getenv("FORUM_ADDR")
-	if addr == "" {
-		addr = ":8080"
-	}
-
-	// Uploads live alongside the DB file so that a single data volume in
-	// production captures everything: SQLite + image attachments.
-	uploadsDir := filepath.Join(filepath.Dir(dbPath), "uploads")
-	if err := os.MkdirAll(uploadsDir, 0o755); err != nil {
-		log.Fatalf("uploads dir: %v", err)
-	}
-
-	database, err := db.Open(dbPath)
-	if err != nil {
-		log.Fatalf("db: %v", err)
-	}
-	defer database.Close()
-	log.Printf("db: opened %s, schema applied", dbPath)
-
-	hub := ws.NewHub()
-	go hub.Run()
-
-	mux := http.NewServeMux()
-	routes.Register(mux, database, hub, uploadsDir)
-
-	log.Printf("listening on http://localhost%s", addr)
-	if err := http.ListenAndServe(addr, mux); err != nil {
+	if err := server.Run(); err != nil {
 		log.Fatal(err)
 	}
 }

@@ -2,10 +2,9 @@
 .git
 .gitignore
 
-# Local data — never bake into an image. forum.db is the exception: it
-# ships demo accounts and posts that the entrypoint seeds into the volume.
+# Local data — never bake into an image. Demo data is created by
+# `go run ./cmd/seed`.
 *.db
-!forum.db
 *.db-wal
 *.db-shm
 *.db-journal

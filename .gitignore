@@ -2,11 +2,9 @@
 /forum
 *.exe
 
-# SQLite database files. forum.db is tracked because it ships the demo
-# accounts and posts that reviewers need on clone; WAL and shared-memory
-# sidecars stay untracked.
+# SQLite database files are runtime data. Demo accounts/posts are created by
+# `go run ./cmd/seed`.
 *.db
-!forum.db
 *.db-journal
 *.db-wal
 *.db-shm

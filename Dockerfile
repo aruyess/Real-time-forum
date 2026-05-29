@@ -16,8 +16,9 @@ RUN go mod download
 COPY . .
 
 # CGO is required by mattn/go-sqlite3.
-# -ldflags trims the symbol table for a smaller binary.
-RUN CGO_ENABLED=1 go build -ldflags="-s -w" -o /out/forum ./cmd/server
+# -ldflags trims the symbol table for smaller binaries.
+RUN CGO_ENABLED=1 go build -ldflags="-s -w" -o /out/forum ./cmd/server \
+ && CGO_ENABLED=1 go build -ldflags="-s -w" -o /out/seed ./cmd/seed
 
 
 # ---- runtime stage ---------------------------------------------------------
@@ -30,13 +31,8 @@ RUN apk add --no-cache ca-certificates \
 
 WORKDIR /app
 COPY --from=build /out/forum /app/forum
+COPY --from=build /out/seed /app/seed
 COPY --from=build /src/web /app/web
-
-# Ship the seeded database inside the image. The entrypoint copies it into
-# the runtime volume only when the volume is empty, so subsequent starts
-# preserve whatever the user has written. `docker compose down -v` wipes
-# the volume and the next start re-seeds from /seed/forum.db.
-COPY forum.db /seed/forum.db
 
 USER forum
 
@@ -47,6 +43,4 @@ ENV FORUM_DB=/data/forum.db \
 VOLUME ["/data"]
 EXPOSE 8080
 
-# Seed-then-exec: copy the bundled DB into the volume on first start, then
-# replace this shell with the server so signals reach PID 1 cleanly.
-CMD ["sh", "-c", "[ -f /data/forum.db ] || cp /seed/forum.db /data/forum.db; exec /app/forum"]
+CMD ["/app/forum"]
